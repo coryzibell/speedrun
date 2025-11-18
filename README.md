@@ -1,6 +1,6 @@
 # speedrun
 
-Network speed test tool and file downloader.
+Network speed test tool and file downloader. Built in rust, doesn't need curl, wget, or system ssl libs.
 
 ## SYNOPSIS
 

@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - '.github/workflows/**'
 
 permissions:
   contents: write
@@ -12,6 +14,8 @@ jobs:
   bump-version:
     name: Bump Version
     runs-on: ubuntu-latest
+    # Skip if commit is from github-actions bot
+    if: github.actor != 'github-actions[bot]'
     steps:
       - uses: actions/checkout@v4
         with:

@@ -1,10 +1,10 @@
 [package]
-name = "speedrun"
+name = "speedo"
 version = "0.2.10"
 edition = "2021"
 description = "Network speed test tool and file downloader built in Rust"
 license = "MIT OR Apache-2.0"
-repository = "https://github.com/kautau/speedrun"
+repository = "https://github.com/kautau/speedo"
 keywords = ["network", "speed-test", "download", "benchmark", "cli"]
 categories = ["command-line-utilities", "network-programming"]
 

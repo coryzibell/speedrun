@@ -157,9 +157,11 @@ jobs:
           
           # Upload all packaged binaries
           for dir in artifacts/*-packaged/; do
-            for file in "$dir"*.{tar.gz,zip} 2>/dev/null; do
-              if [ -f "$file" ]; then
-                gh release upload "$VERSION" "$file"
-              fi
-            done
+            if [ -d "$dir" ]; then
+              for file in "$dir"*.tar.gz "$dir"*.zip; do
+                if [ -f "$file" ]; then
+                  gh release upload "$VERSION" "$file"
+                fi
+              done
+            fi
           done

@@ -1,3 +1,6 @@
+// Application entry point and command-line argument handling.
+// Routes execution to interactive mode, non-interactive mode, or URL download.
+
 mod config;
 mod downloader;
 mod servers;

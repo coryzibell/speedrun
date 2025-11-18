@@ -1,3 +1,6 @@
+// Configuration file loading and management.
+// Handles reading TOML config from ./speedrun.toml, ./.speedrun.toml, or ~/.speedrun.toml.
+
 use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 

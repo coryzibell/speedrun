@@ -1,3 +1,6 @@
+// Interactive menu and result display functions.
+// Handles server selection menu, download status messages, and formatted output.
+
 use colored::*;
 use inquire::{Select, Text, Confirm};
 

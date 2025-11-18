@@ -1,3 +1,6 @@
+// Pre-configured speed test server definitions.
+// Contains test file URLs from Cloudflare, Tele2, Hetzner, and Vultr.
+
 pub struct TestServer {
     pub name: &'static str,
     pub url: &'static str,

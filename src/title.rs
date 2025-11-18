@@ -1,3 +1,7 @@
+// In the sprawl of identical terminals, your mark matters. Every run gets a face, 
+// random font-face and color bleeding different each time. They can copy the code,
+// but they can't copy the signature. That's yours.
+
 use figlet_rs::FIGfont;
 use colored::*;
 

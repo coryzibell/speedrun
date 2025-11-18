@@ -1,3 +1,7 @@
+// HTTP file download with progress tracking.
+// Downloads files from URLs with optional save-to-disk, reporting connection time,
+// TTFB, total time, and bytes downloaded.
+
 use indicatif::{ProgressBar, ProgressStyle};
 use reqwest::Client;
 use std::time::Instant;

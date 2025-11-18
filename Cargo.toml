@@ -1,6 +1,7 @@
 [package]
+<<<<<<< HEAD
 name = "speedo"
-version = "0.2.10"
+version = "0.2.11"
 edition = "2021"
 description = "Network speed test tool and file downloader built in Rust"
 license = "MIT OR Apache-2.0"

@@ -24,33 +24,60 @@ pub enum ServerSelection {
 }
 
 pub enum ServerOption {
-    Server(ServerMetadata, Option<String>), // server and optional health info
+    Server(ServerMetadata, Option<String>, Color), // server, health info, and color
     Back,
 }
 
-fn get_provider_color(provider: &Option<String>) -> Color {
-    match provider.as_deref() {
-        Some("Hetzner") => Color::BrightCyan,
-        Some("Vultr") => Color::BrightBlue,
-        Some("Linode") => Color::BrightGreen,
-        Some("DataPacket") => Color::BrightMagenta,
-        Some("OVH") => Color::BrightYellow,
-        Some("Cloudflare") => Color::BrightRed,
-        Some("Tele2") => Color::BrightWhite,
-        _ => Color::White,
-    }
+// Define a palette of visually distinct colors
+const COLOR_PALETTE: &[Color] = &[
+    Color::BrightCyan,
+    Color::BrightBlue,
+    Color::BrightGreen,
+    Color::BrightMagenta,
+    Color::BrightYellow,
+    Color::BrightRed,
+    Color::Cyan,
+    Color::Blue,
+    Color::Green,
+    Color::Magenta,
+    Color::Yellow,
+    Color::Red,
+];
+
+fn build_provider_color_map(servers: &[ServerMetadata]) -> HashMap<String, Color> {
+    // Extract and sort all unique providers
+    let mut providers: Vec<String> = servers
+        .iter()
+        .filter_map(|s| s.provider.clone())
+        .collect();
+    providers.sort();
+    providers.dedup();
+    
+    // Build map from provider to color
+    providers
+        .into_iter()
+        .enumerate()
+        .map(|(i, provider)| (provider, COLOR_PALETTE[i % COLOR_PALETTE.len()]))
+        .collect()
+}
+
+fn get_provider_color(provider: &Option<String>, color_map: &HashMap<String, Color>) -> Color {
+    provider
+        .as_ref()
+        .and_then(|p| color_map.get(p))
+        .copied()
+        .unwrap_or(Color::White)
 }
 
 impl std::fmt::Display for ServerOption {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            ServerOption::Server(server, health_info) => {
-                let color = get_provider_color(&server.provider);
+            ServerOption::Server(server, health_info, color) => {
                 let base = format!("{} - {}", 
                     server.name,
                     server.location.as_ref().unwrap_or(&"Unknown".to_string())
                 );
-                let colored_base = base.color(color);
+                let colored_base = base.color(*color);
                 
                 if let Some(health) = health_info {
                     write!(f, "{}{}", colored_base, health)
@@ -207,6 +234,9 @@ fn group_servers_by_provider(servers: &[ServerMetadata]) -> HashMap<String, Vec<
 }
 
 fn select_from_list(servers: &[ServerMetadata], health_data: &LocalServerData) -> Result<ServerSelection, Box<dyn std::error::Error>> {
+    // Build color map once for all servers
+    let color_map = build_provider_color_map(servers);
+    
     let mut options: Vec<ServerOption> = servers.iter().map(|s| {
         let health = health_data.health.get(&s.url);
         let speed_info = if let Some(h) = health {
@@ -219,7 +249,8 @@ fn select_from_list(servers: &[ServerMetadata], health_data: &LocalServerData) -
             None
         };
         
-        ServerOption::Server(s.clone(), speed_info)
+        let color = get_provider_color(&s.provider, &color_map);
+        ServerOption::Server(s.clone(), speed_info, color)
     }).collect();
     
     options.push(ServerOption::Back);
@@ -229,7 +260,7 @@ fn select_from_list(servers: &[ServerMetadata], health_data: &LocalServerData) -
         .prompt()?;
     
     match selection {
-        ServerOption::Server(server, _) => Ok(ServerSelection::Server(server)),
+        ServerOption::Server(server, _, _) => Ok(ServerSelection::Server(server)),
         ServerOption::Back => show_menu(),
     }
 }

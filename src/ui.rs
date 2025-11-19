@@ -23,6 +23,33 @@ pub enum ServerSelection {
     Quit,
 }
 
+pub enum MenuOption {
+    GlobalServer(ServerMetadata),
+    BrowseAll(usize), // carries server count
+    BrowseByRegion,
+    BrowseByProvider,
+    Search,
+    Quit,
+}
+
+impl std::fmt::Display for MenuOption {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            MenuOption::GlobalServer(server) => {
+                write!(f, "🌐  {} - {}", 
+                    server.name,
+                    server.location.as_ref().unwrap_or(&"Global CDN".to_string())
+                )
+            }
+            MenuOption::BrowseAll(count) => write!(f, "🌍  Browse all servers ({} servers)", count),
+            MenuOption::BrowseByRegion => write!(f, "🗺️  Browse by region"),
+            MenuOption::BrowseByProvider => write!(f, "🏢  Browse by provider"),
+            MenuOption::Search => write!(f, "🔍  Search servers"),
+            MenuOption::Quit => write!(f, "📍  Quit"),
+        }
+    }
+}
+
 pub enum MenuSelection {
     Server(ServerMetadata),
     BrowseAll,
@@ -56,58 +83,36 @@ fn get_main_menu_selection(servers: &[ServerMetadata]) -> Result<MenuSelection, 
     print!("{}", get_title());
     
     // Separate global servers from others
-    let global_servers: Vec<&ServerMetadata> = servers.iter()
+    let global_servers: Vec<ServerMetadata> = servers.iter()
         .filter(|s| s.region.as_ref().map(|r| r == "Global").unwrap_or(false))
+        .cloned()
         .collect();
     
-    let mut options: Vec<String> = Vec::new();
+    let mut options: Vec<MenuOption> = Vec::new();
     
     // Add global servers first
-    for server in &global_servers {
-        options.push(format!("🌐  {} - {}", 
-            server.name,
-            server.location.as_ref().unwrap_or(&"Global CDN".to_string())
-        ));
-    }
-    
-    // Add separator if we have global servers
-    if !global_servers.is_empty() {
-        options.push("─────────────────────────".to_string());
+    for server in global_servers {
+        options.push(MenuOption::GlobalServer(server));
     }
     
     // Add browsing options
-    options.push(format!("🌍  Browse all servers ({} servers)", servers.len()));
-    options.push("🗺️  Browse by region".to_string());
-    options.push("🏢  Browse by provider".to_string());
-    options.push("🔍  Search servers".to_string());
-    options.push("📍  Quit".to_string());
+    options.push(MenuOption::BrowseAll(servers.len()));
+    options.push(MenuOption::BrowseByRegion);
+    options.push(MenuOption::BrowseByProvider);
+    options.push(MenuOption::Search);
+    options.push(MenuOption::Quit);
     
     let selection = Select::new("Select a server or browse:", options)
         .prompt()?;
     
-    // Check if it's a global server
-    for (i, server) in global_servers.iter().enumerate() {
-        let server_option = format!("🌐  {} - {}", 
-            server.name,
-            server.location.as_ref().unwrap_or(&"Global CDN".to_string())
-        );
-        if selection == server_option {
-            return Ok(MenuSelection::Server((*global_servers[i]).clone()));
-        }
-    }
-    
-    // Check browsing options
-    if selection.starts_with("🌍  Browse all servers") {
-        return Ok(MenuSelection::BrowseAll);
-    }
-    
-    match selection.as_str() {
-        "🗺️  Browse by region" => Ok(MenuSelection::BrowseByRegion),
-        "🏢  Browse by provider" => Ok(MenuSelection::BrowseByProvider),
-        "🔍  Search servers" => Ok(MenuSelection::Search),
-        "📍  Quit" => Ok(MenuSelection::Quit),
-        "─────────────────────────" => get_main_menu_selection(servers), // Re-show menu if separator selected
-        _ => Ok(MenuSelection::BrowseAll),
+    // Convert MenuOption to MenuSelection
+    match selection {
+        MenuOption::GlobalServer(server) => Ok(MenuSelection::Server(server)),
+        MenuOption::BrowseAll(_) => Ok(MenuSelection::BrowseAll),
+        MenuOption::BrowseByRegion => Ok(MenuSelection::BrowseByRegion),
+        MenuOption::BrowseByProvider => Ok(MenuSelection::BrowseByProvider),
+        MenuOption::Search => Ok(MenuSelection::Search),
+        MenuOption::Quit => Ok(MenuSelection::Quit),
     }
 }
 

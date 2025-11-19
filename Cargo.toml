@@ -20,7 +20,7 @@ pkg-fmt = "zip"
 pkg-fmt = "zip"
 
 [dependencies]
-reqwest = { version = "0.11", default-features = false, features = ["stream", "rustls-tls"] }
+reqwest = { version = "0.11", default-features = false, features = ["stream", "rustls-tls", "json"] }
 tokio = { version = "1", features = ["full"] }
 colored = "2.1"
 indicatif = "0.17"

@@ -44,12 +44,31 @@ struct Args {
     /// Output JSON format (shorthand for --format json)
     #[arg(long)]
     json: bool,
+    
+    /// Update remote server list
+    #[arg(long)]
+    update_servers: bool,
 }
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args = Args::parse();
     let config = load_config();
+    
+    // Handle --update-servers command
+    if args.update_servers {
+        return update_server_list().await;
+    }
+    
+    // Auto-update server list if cache is stale
+    let mut server_data = servers::load_local_server_data();
+    if servers::should_update_cache(&server_data) {
+        if let Ok(remote_list) = servers::fetch_remote_server_list().await {
+            server_data.remote_list = Some(remote_list);
+            server_data.cache_timestamp = chrono::Utc::now();
+            servers::save_local_server_data(&server_data).ok();
+        }
+    }
     
     // Determine speed unit: CLI flag overrides config
     let speed_unit_str = args.speed_unit.as_ref().unwrap_or(&config.speed_unit);
@@ -203,4 +222,34 @@ async fn run_interactive_mode(config: &crate::config::Config, speed_unit: SpeedU
     }
 
     Ok(())
+}
+
+async fn update_server_list() -> Result<(), Box<dyn std::error::Error>> {
+    use colored::*;
+    
+    println!("{}", "Fetching remote server list...".yellow());
+    
+    match servers::fetch_remote_server_list().await {
+        Ok(remote_list) => {
+            let count = remote_list.servers.len();
+            println!("{}", format!("✓ Downloaded {} servers (version {})", count, remote_list.version).green());
+            
+            let mut server_data = servers::load_local_server_data();
+            server_data.remote_list = Some(remote_list);
+            server_data.cache_timestamp = chrono::Utc::now();
+            
+            if let Err(e) = servers::save_local_server_data(&server_data) {
+                println!("{}", format!("Warning: Failed to save server list: {}", e).red());
+            } else {
+                println!("{}", "✓ Server list cached successfully".green());
+            }
+            
+            Ok(())
+        }
+        Err(e) => {
+            println!("{}", format!("✗ Failed to fetch server list: {}", e).red());
+            println!("{}", "Using embedded fallback servers".yellow());
+            Err(e)
+        }
+    }
 }

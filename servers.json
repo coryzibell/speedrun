@@ -1,0 +1,123 @@
+{
+  "version": "1.0.0",
+  "updated": "2025-11-19T05:00:00Z",
+  "servers": [
+    {
+      "name": "Cloudflare (CDN)",
+      "url": "https://speed.cloudflare.com/__down?bytes=100000000",
+      "provider": "Cloudflare",
+      "location": "Global CDN",
+      "region": "Global",
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "Tele2 (Global)",
+      "url": "http://speedtest.tele2.net/100MB.zip",
+      "provider": "Tele2",
+      "location": "Global",
+      "region": "Global",
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "Hetzner (Nuremberg)",
+      "url": "https://nbg1-speed.hetzner.com/100MB.bin",
+      "provider": "Hetzner",
+      "location": "Nuremberg, Germany",
+      "region": "Europe",
+      "lat": 49.4521,
+      "lon": 11.0767,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "Hetzner (Falkenstein)",
+      "url": "https://fsn1-speed.hetzner.com/100MB.bin",
+      "provider": "Hetzner",
+      "location": "Falkenstein, Germany",
+      "region": "Europe",
+      "lat": 50.4779,
+      "lon": 12.3713,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "Hetzner (Helsinki)",
+      "url": "https://hel1-speed.hetzner.com/100MB.bin",
+      "provider": "Hetzner",
+      "location": "Helsinki, Finland",
+      "region": "Europe",
+      "lat": 60.1695,
+      "lon": 24.9354,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "Hetzner (Ashburn VA)",
+      "url": "https://ash-speed.hetzner.com/100MB.bin",
+      "provider": "Hetzner",
+      "location": "Ashburn, Virginia, USA",
+      "region": "North America",
+      "lat": 39.0438,
+      "lon": -77.4874,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "Hetzner (Hillsboro OR)",
+      "url": "https://hil-speed.hetzner.com/100MB.bin",
+      "provider": "Hetzner",
+      "location": "Hillsboro, Oregon, USA",
+      "region": "North America",
+      "lat": 45.5229,
+      "lon": -122.9698,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "Hetzner (Singapore)",
+      "url": "https://sin-speed.hetzner.com/100MB.bin",
+      "provider": "Hetzner",
+      "location": "Singapore",
+      "region": "Asia",
+      "lat": 1.3521,
+      "lon": 103.8198,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "Vultr (New Jersey)",
+      "url": "https://nj-us-ping.vultr.com/vultr.com.100MB.bin",
+      "provider": "Vultr",
+      "location": "New Jersey, USA",
+      "region": "North America",
+      "lat": 40.7357,
+      "lon": -74.1724,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "Vultr (Silicon Valley)",
+      "url": "https://sjo-ca-us-ping.vultr.com/vultr.com.100MB.bin",
+      "provider": "Vultr",
+      "location": "Silicon Valley, California, USA",
+      "region": "North America",
+      "lat": 37.3382,
+      "lon": -121.8863,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "Vultr (Singapore)",
+      "url": "https://sgp-ping.vultr.com/vultr.com.100MB.bin",
+      "provider": "Vultr",
+      "location": "Singapore",
+      "region": "Asia",
+      "lat": 1.3521,
+      "lon": 103.8198,
+      "file_size": 104857600,
+      "enabled": true
+    }
+  ]
+}

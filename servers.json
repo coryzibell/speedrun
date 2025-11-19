@@ -1,6 +1,6 @@
 {
-  "version": "2.3.0",
-  "updated": "2025-11-19T06:01:00Z",
+  "version": "2.4.0",
+  "updated": "2025-11-19T06:08:00Z",
   "servers": [
     {
       "name": "Cloudflare CDN",
@@ -500,6 +500,50 @@
       "lat": -33.8688,
       "lon": 151.2093,
       "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket São Paulo",
+      "url": "https://sao.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "São Paulo, Brazil",
+      "region": "South America",
+      "lat": -23.5505,
+      "lon": -46.6333,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket Hong Kong",
+      "url": "https://hkg.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "Hong Kong",
+      "region": "Asia",
+      "lat": 22.3193,
+      "lon": 114.1694,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket Prague",
+      "url": "https://prg.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "Prague, Czech Republic",
+      "region": "Europe",
+      "lat": 50.0755,
+      "lon": 14.4378,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket Sofia",
+      "url": "https://sof.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "Sofia, Bulgaria",
+      "region": "Europe",
+      "lat": 42.6977,
+      "lon": 23.3219,
+      "file_size": 100000000,
       "enabled": true
     }
   ]

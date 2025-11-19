@@ -4,6 +4,7 @@
 
 use indicatif::{ProgressBar, ProgressStyle};
 use reqwest::Client;
+use serde::Serialize;
 use std::time::Instant;
 use tokio::fs::File;
 use tokio::io::AsyncWriteExt;
@@ -45,6 +46,7 @@ fn format_speed(bytes_per_sec: f64, unit: SpeedUnit) -> String {
     }
 }
 
+#[derive(Debug, Clone, Serialize)]
 pub struct DownloadResult {
     pub status_code: u16,
     pub connect_time: f64,

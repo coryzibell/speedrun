@@ -9,6 +9,7 @@ use std::collections::{HashMap, HashSet};
 
 pub enum ServerSelection {
     Server(ServerMetadata),
+    #[allow(dead_code)]
     Custom(String, Option<String>),
     Quit,
 }

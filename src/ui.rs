@@ -7,6 +7,22 @@ use bytesize::ByteSize;
 use crate::servers::{ServerMetadata, LocalServerData};
 use std::collections::{HashMap, HashSet};
 
+fn print_title() {
+    println!(r#"
+                                              
+ $$$$$$$\  $$$$$$\   $$$$$$\   $$$$$$\   $$$$$$$ | $$$$$$\  
+$$  _____|$$  __$$\ $$  __$$\ $$  __$$\ $$  __$$ |$$  __$$\ 
+\$$$$$$\  $$ /  $$ |$$$$$$$$ |$$$$$$$$ |$$ /  $$ |$$ /  $$ |
+ \____$$\ $$ |  $$ |$$   ____|$$   ____|$$ |  $$ |$$ |  $$ |
+$$$$$$$  |$$$$$$$  |\$$$$$$$\ \$$$$$$$\ \$$$$$$$ |\$$$$$$  |
+\_______/ $$  ____/  \_______| \_______| \_______| \______/ 
+          $$ |                                              
+          $$ |                                              
+          \__|                                              
+speedo v{}
+"#, env!("CARGO_PKG_VERSION"));
+}
+
 pub enum ServerSelection {
     Server(ServerMetadata),
     #[allow(dead_code)]
@@ -43,7 +59,7 @@ pub fn wait_for_continue() -> Result<(), Box<dyn std::error::Error>> {
 
 fn get_browse_mode() -> Result<BrowseMode, Box<dyn std::error::Error>> {
     print!("\x1B[2J\x1B[1;1H");
-    playbill::print_title("speedo", Some(env!("CARGO_PKG_VERSION")));
+    print_title();
     
     let options = vec![
         "🌍  Browse all servers",

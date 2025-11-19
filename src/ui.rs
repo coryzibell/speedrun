@@ -23,10 +23,133 @@ pub enum ServerSelection {
     Quit,
 }
 
-pub enum BrowseMode {
-    All,
-    ByRegion,
-    ByProvider,
+pub enum ServerOption {
+    Server(ServerMetadata, Option<String>, Color), // server, health info, and color
+    Back,
+}
+
+// Define a palette of visually distinct colors
+const COLOR_PALETTE: &[Color] = &[
+    Color::BrightCyan,
+    Color::BrightBlue,
+    Color::BrightGreen,
+    Color::BrightMagenta,
+    Color::BrightYellow,
+    Color::BrightRed,
+    Color::Cyan,
+    Color::Blue,
+    Color::Green,
+    Color::Magenta,
+    Color::Yellow,
+    Color::Red,
+];
+
+fn build_provider_color_map(servers: &[ServerMetadata]) -> HashMap<String, Color> {
+    // Extract and sort all unique providers
+    let mut providers: Vec<String> = servers
+        .iter()
+        .filter_map(|s| s.provider.clone())
+        .collect();
+    providers.sort();
+    providers.dedup();
+    
+    // Build map from provider to color
+    providers
+        .into_iter()
+        .enumerate()
+        .map(|(i, provider)| (provider, COLOR_PALETTE[i % COLOR_PALETTE.len()]))
+        .collect()
+}
+
+fn get_provider_color(provider: &Option<String>, color_map: &HashMap<String, Color>) -> Color {
+    provider
+        .as_ref()
+        .and_then(|p| color_map.get(p))
+        .copied()
+        .unwrap_or(Color::White)
+}
+
+impl std::fmt::Display for ServerOption {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ServerOption::Server(server, health_info, color) => {
+                let base = format!("{} - {}", 
+                    server.name,
+                    server.location.as_ref().unwrap_or(&"Unknown".to_string())
+                );
+                let colored_base = base.color(*color);
+                
+                if let Some(health) = health_info {
+                    write!(f, "{}{}", colored_base, health)
+                } else {
+                    write!(f, "{}", colored_base)
+                }
+            }
+            ServerOption::Back => write!(f, "← Back"),
+        }
+    }
+}
+
+pub enum RegionOption {
+    Region(String, usize), // region name and server count
+    Back,
+}
+
+impl std::fmt::Display for RegionOption {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            RegionOption::Region(name, count) => write!(f, "{} ({} servers)", name, count),
+            RegionOption::Back => write!(f, "← Back"),
+        }
+    }
+}
+
+pub enum ProviderOption {
+    Provider(String, String), // provider name and display info
+    Back,
+}
+
+impl std::fmt::Display for ProviderOption {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ProviderOption::Provider(_, display) => write!(f, "{}", display),
+            ProviderOption::Back => write!(f, "← Back"),
+        }
+    }
+}
+
+pub enum MenuOption {
+    GlobalServer(ServerMetadata),
+    BrowseAll(usize), // carries server count
+    BrowseByRegion,
+    BrowseByProvider,
+    Search,
+    Quit,
+}
+
+impl std::fmt::Display for MenuOption {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            MenuOption::GlobalServer(server) => {
+                write!(f, "🌐  {} - {}", 
+                    server.name,
+                    server.location.as_ref().unwrap_or(&"Global CDN".to_string())
+                )
+            }
+            MenuOption::BrowseAll(count) => write!(f, "🌍  Browse all servers ({} servers)", count),
+            MenuOption::BrowseByRegion => write!(f, "🗺️  Browse by region"),
+            MenuOption::BrowseByProvider => write!(f, "🏢  Browse by provider"),
+            MenuOption::Search => write!(f, "🔍  Search servers"),
+            MenuOption::Quit => write!(f, "📍  Quit"),
+        }
+    }
+}
+
+pub enum MenuSelection {
+    Server(ServerMetadata),
+    BrowseAll,
+    BrowseByRegion,
+    BrowseByProvider,
     Search,
     Quit,
 }
@@ -50,28 +173,41 @@ pub fn wait_for_continue() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-fn get_browse_mode() -> Result<BrowseMode, Box<dyn std::error::Error>> {
+fn get_main_menu_selection(servers: &[ServerMetadata]) -> Result<MenuSelection, Box<dyn std::error::Error>> {
     print!("\x1B[2J\x1B[1;1H");
     print!("{}", get_title());
     
-    let options = vec![
-        "🌍  Browse all servers",
-        "🗺️  Browse by region",
-        "🏢  Browse by provider",
-        "🔍  Search servers",
-        "📍  Quit",
-    ];
+    // Separate global servers from others
+    let global_servers: Vec<ServerMetadata> = servers.iter()
+        .filter(|s| s.region.as_ref().map(|r| r == "Global").unwrap_or(false))
+        .cloned()
+        .collect();
     
-    let selection = Select::new("How would you like to browse servers?", options)
+    let mut options: Vec<MenuOption> = Vec::new();
+    
+    // Add global servers first
+    for server in global_servers {
+        options.push(MenuOption::GlobalServer(server));
+    }
+    
+    // Add browsing options
+    options.push(MenuOption::BrowseAll(servers.len()));
+    options.push(MenuOption::BrowseByRegion);
+    options.push(MenuOption::BrowseByProvider);
+    options.push(MenuOption::Search);
+    options.push(MenuOption::Quit);
+    
+    let selection = Select::new("Select a server or browse:", options)
         .prompt()?;
     
+    // Convert MenuOption to MenuSelection
     match selection {
-        "🌍  Browse all servers" => Ok(BrowseMode::All),
-        "🗺️  Browse by region" => Ok(BrowseMode::ByRegion),
-        "🏢  Browse by provider" => Ok(BrowseMode::ByProvider),
-        "🔍  Search servers" => Ok(BrowseMode::Search),
-        "📍  Quit" => Ok(BrowseMode::Quit),
-        _ => Ok(BrowseMode::All),
+        MenuOption::GlobalServer(server) => Ok(MenuSelection::Server(server)),
+        MenuOption::BrowseAll(_) => Ok(MenuSelection::BrowseAll),
+        MenuOption::BrowseByRegion => Ok(MenuSelection::BrowseByRegion),
+        MenuOption::BrowseByProvider => Ok(MenuSelection::BrowseByProvider),
+        MenuOption::Search => Ok(MenuSelection::Search),
+        MenuOption::Quit => Ok(MenuSelection::Quit),
     }
 }
 
@@ -98,102 +234,102 @@ fn group_servers_by_provider(servers: &[ServerMetadata]) -> HashMap<String, Vec<
 }
 
 fn select_from_list(servers: &[ServerMetadata], health_data: &LocalServerData) -> Result<ServerSelection, Box<dyn std::error::Error>> {
-    let mut display_names: Vec<String> = servers.iter().map(|s| {
+    // Build color map once for all servers
+    let color_map = build_provider_color_map(servers);
+    
+    let mut options: Vec<ServerOption> = servers.iter().map(|s| {
         let health = health_data.health.get(&s.url);
         let speed_info = if let Some(h) = health {
             if h.avg_speed_mbps > 0.0 {
-                format!(" ({:.1} MB/s avg)", h.avg_speed_mbps / 8.0)
+                Some(format!(" ({:.1} MB/s avg)", h.avg_speed_mbps / 8.0))
             } else {
-                String::new()
+                None
             }
         } else {
-            String::new()
+            None
         };
         
-        format!("{} - {}{}", 
-            s.name,
-            s.location.as_ref().unwrap_or(&"Unknown".to_string()),
-            speed_info
-        )
+        let color = get_provider_color(&s.provider, &color_map);
+        ServerOption::Server(s.clone(), speed_info, color)
     }).collect();
     
-    display_names.push("← Back".to_string());
+    options.push(ServerOption::Back);
     
-    let selection = Select::new("Select a server:", display_names)
+    let selection = Select::new("Select a server:", options)
         .with_page_size(20)
         .prompt()?;
     
-    if selection == "← Back" {
-        return show_menu();
+    match selection {
+        ServerOption::Server(server, _, _) => Ok(ServerSelection::Server(server)),
+        ServerOption::Back => show_menu(),
     }
-    
-    // Find the server by matching the beginning of the display name
-    let idx = servers.iter().position(|s| {
-        selection.starts_with(&format!("{} - {}", s.name, s.location.as_ref().unwrap_or(&"Unknown".to_string())))
-    }).unwrap_or(0);
-    
-    Ok(ServerSelection::Server(servers[idx].clone()))
 }
 
 fn browse_by_region(servers: &[ServerMetadata], health_data: &LocalServerData) -> Result<ServerSelection, Box<dyn std::error::Error>> {
     let grouped = group_servers_by_region(servers);
     
-    let mut regions: Vec<String> = grouped.keys()
-        .map(|r| {
-            let count = grouped.get(r).map(|v| v.len()).unwrap_or(0);
-            format!("{} ({} servers)", r, count)
-        })
+    let mut options: Vec<RegionOption> = grouped.iter()
+        .map(|(region, servers)| RegionOption::Region(region.clone(), servers.len()))
         .collect();
-    regions.sort();
-    regions.push("← Back".to_string());
+    options.sort_by(|a, b| {
+        match (a, b) {
+            (RegionOption::Region(name_a, _), RegionOption::Region(name_b, _)) => name_a.cmp(name_b),
+            _ => std::cmp::Ordering::Equal,
+        }
+    });
+    options.push(RegionOption::Back);
     
-    let selection = Select::new("Select a region:", regions)
+    let selection = Select::new("Select a region:", options)
         .prompt()?;
     
-    if selection == "← Back" {
-        return show_menu();
+    match selection {
+        RegionOption::Region(region, _) => {
+            let region_servers = grouped.get(&region).unwrap();
+            select_from_list(region_servers, health_data)
+        }
+        RegionOption::Back => show_menu(),
     }
-    
-    let region = selection.split(" (").next().unwrap_or("").to_string();
-    let region_servers = grouped.get(&region).unwrap();
-    
-    select_from_list(region_servers, health_data)
 }
 
 fn browse_by_provider(servers: &[ServerMetadata], health_data: &LocalServerData) -> Result<ServerSelection, Box<dyn std::error::Error>> {
     let grouped = group_servers_by_provider(servers);
     
-    let mut providers: Vec<String> = grouped.keys()
-        .map(|p| {
-            let count = grouped.get(p).map(|v| v.len()).unwrap_or(0);
-            let regions: HashSet<String> = grouped.get(p).unwrap()
-                .iter()
+    let mut options: Vec<ProviderOption> = grouped.iter()
+        .map(|(provider, servers)| {
+            let count = servers.len();
+            let regions: HashSet<String> = servers.iter()
                 .filter_map(|s| s.region.clone())
                 .collect();
             
-            if regions.is_empty() {
-                format!("{} ({} servers)", p, count)
+            let display = if regions.is_empty() {
+                format!("{} ({} servers)", provider, count)
             } else if regions.len() == 1 {
-                format!("{} ({} servers - {})", p, count, regions.iter().next().unwrap())
+                format!("{} ({} servers - {})", provider, count, regions.iter().next().unwrap())
             } else {
-                format!("{} ({} servers - {} regions)", p, count, regions.len())
-            }
+                format!("{} ({} servers - {} regions)", provider, count, regions.len())
+            };
+            
+            ProviderOption::Provider(provider.clone(), display)
         })
         .collect();
-    providers.sort();
-    providers.push("← Back".to_string());
+    options.sort_by(|a, b| {
+        match (a, b) {
+            (ProviderOption::Provider(name_a, _), ProviderOption::Provider(name_b, _)) => name_a.cmp(name_b),
+            _ => std::cmp::Ordering::Equal,
+        }
+    });
+    options.push(ProviderOption::Back);
     
-    let selection = Select::new("Select a provider:", providers)
+    let selection = Select::new("Select a provider:", options)
         .prompt()?;
     
-    if selection == "← Back" {
-        return show_menu();
+    match selection {
+        ProviderOption::Provider(provider, _) => {
+            let provider_servers = grouped.get(&provider).unwrap();
+            select_from_list(provider_servers, health_data)
+        }
+        ProviderOption::Back => show_menu(),
     }
-    
-    let provider = selection.split(" (").next().unwrap_or("").to_string();
-    let provider_servers = grouped.get(&provider).unwrap();
-    
-    select_from_list(provider_servers, health_data)
 }
 
 fn browse_all(servers: &[ServerMetadata], health_data: &LocalServerData) -> Result<ServerSelection, Box<dyn std::error::Error>> {
@@ -231,15 +367,16 @@ pub fn show_menu() -> Result<ServerSelection, Box<dyn std::error::Error>> {
     let server_data = crate::servers::load_local_server_data();
     let servers = crate::servers::get_merged_server_list(&server_data);
     
-    // Get browse mode
-    let mode = get_browse_mode()?;
+    // Get main menu selection
+    let selection = get_main_menu_selection(&servers)?;
     
-    match mode {
-        BrowseMode::All => browse_all(&servers, &server_data),
-        BrowseMode::ByRegion => browse_by_region(&servers, &server_data),
-        BrowseMode::ByProvider => browse_by_provider(&servers, &server_data),
-        BrowseMode::Search => search_servers(&servers, &server_data),
-        BrowseMode::Quit => Ok(ServerSelection::Quit),
+    match selection {
+        MenuSelection::Server(server) => Ok(ServerSelection::Server(server)),
+        MenuSelection::BrowseAll => browse_all(&servers, &server_data),
+        MenuSelection::BrowseByRegion => browse_by_region(&servers, &server_data),
+        MenuSelection::BrowseByProvider => browse_by_provider(&servers, &server_data),
+        MenuSelection::Search => search_servers(&servers, &server_data),
+        MenuSelection::Quit => Ok(ServerSelection::Quit),
     }
 }
 

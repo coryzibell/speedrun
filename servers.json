@@ -1,6 +1,6 @@
 {
-  "version": "2.2.0",
-  "updated": "2025-11-19T05:55:00Z",
+  "version": "2.3.0",
+  "updated": "2025-11-19T06:01:00Z",
   "servers": [
     {
       "name": "Cloudflare CDN",
@@ -318,6 +318,39 @@
       "enabled": true
     },
     {
+      "name": "Linode Chicago",
+      "url": "http://speedtest.chicago.linode.com/100MB-chicago.bin",
+      "provider": "Linode",
+      "location": "Chicago, Illinois, USA",
+      "region": "North America",
+      "lat": 41.8781,
+      "lon": -87.6298,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "Linode Seattle",
+      "url": "http://speedtest.seattle.linode.com/100MB-seattle.bin",
+      "provider": "Linode",
+      "location": "Seattle, Washington, USA",
+      "region": "North America",
+      "lat": 47.6062,
+      "lon": -122.3321,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "Linode Miami",
+      "url": "http://speedtest.miami.linode.com/100MB-miami.bin",
+      "provider": "Linode",
+      "location": "Miami, Florida, USA",
+      "region": "North America",
+      "lat": 25.7617,
+      "lon": -80.1918,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
       "name": "Linode London",
       "url": "http://speedtest.london.linode.com/100MB-london.bin",
       "provider": "Linode",
@@ -340,6 +373,28 @@
       "enabled": true
     },
     {
+      "name": "Linode Amsterdam",
+      "url": "http://speedtest.amsterdam.linode.com/100MB-amsterdam.bin",
+      "provider": "Linode",
+      "location": "Amsterdam, Netherlands",
+      "region": "Europe",
+      "lat": 52.3676,
+      "lon": 4.9041,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "Linode Madrid",
+      "url": "http://speedtest.madrid.linode.com/100MB-madrid.bin",
+      "provider": "Linode",
+      "location": "Madrid, Spain",
+      "region": "Europe",
+      "lat": 40.4168,
+      "lon": -3.7038,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
       "name": "Linode Singapore",
       "url": "http://speedtest.singapore.linode.com/100MB-singapore.bin",
       "provider": "Linode",
@@ -347,6 +402,50 @@
       "region": "Asia",
       "lat": 1.3521,
       "lon": 103.8198,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "Linode Tokyo",
+      "url": "http://speedtest.tokyo2.linode.com/100MB-tokyo2.bin",
+      "provider": "Linode",
+      "location": "Tokyo, Japan",
+      "region": "Asia",
+      "lat": 35.6762,
+      "lon": 139.6503,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "Linode Osaka",
+      "url": "http://speedtest.osaka.linode.com/100MB-osaka.bin",
+      "provider": "Linode",
+      "location": "Osaka, Japan",
+      "region": "Asia",
+      "lat": 34.6937,
+      "lon": 135.5023,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "Linode Chennai",
+      "url": "http://speedtest.chennai.linode.com/100MB-chennai.bin",
+      "provider": "Linode",
+      "location": "Chennai, India",
+      "region": "Asia",
+      "lat": 13.0827,
+      "lon": 80.2707,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "Linode Jakarta",
+      "url": "http://speedtest.jakarta.linode.com/100MB-jakarta.bin",
+      "provider": "Linode",
+      "location": "Jakarta, Indonesia",
+      "region": "Asia",
+      "lat": -6.2088,
+      "lon": 106.8456,
       "file_size": 104857600,
       "enabled": true
     },

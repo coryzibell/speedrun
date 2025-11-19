@@ -76,7 +76,7 @@ fn get_main_menu_selection(servers: &[ServerMetadata]) -> Result<MenuSelection, 
     }
     
     // Add browsing options
-    options.push("🌍  Browse all servers".to_string());
+    options.push(format!("🌍  Browse all servers ({} servers)", servers.len()));
     options.push("🗺️  Browse by region".to_string());
     options.push("🏢  Browse by provider".to_string());
     options.push("🔍  Search servers".to_string());
@@ -97,8 +97,11 @@ fn get_main_menu_selection(servers: &[ServerMetadata]) -> Result<MenuSelection, 
     }
     
     // Check browsing options
+    if selection.starts_with("🌍  Browse all servers") {
+        return Ok(MenuSelection::BrowseAll);
+    }
+    
     match selection.as_str() {
-        "🌍  Browse all servers" => Ok(MenuSelection::BrowseAll),
         "🗺️  Browse by region" => Ok(MenuSelection::BrowseByRegion),
         "🏢  Browse by provider" => Ok(MenuSelection::BrowseByProvider),
         "🔍  Search servers" => Ok(MenuSelection::Search),

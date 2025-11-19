@@ -47,7 +47,7 @@ fn get_browse_mode() -> Result<BrowseMode, Box<dyn std::error::Error>> {
     
     let options = vec![
         "🌍  Browse all servers",
-        "🗺️   Browse by region",
+        "🗺️  Browse by region",
         "🏢  Browse by provider",
         "🔍  Search servers",
         "📍  Quit",
@@ -58,7 +58,7 @@ fn get_browse_mode() -> Result<BrowseMode, Box<dyn std::error::Error>> {
     
     match selection {
         "🌍  Browse all servers" => Ok(BrowseMode::All),
-        "🗺️   Browse by region" => Ok(BrowseMode::ByRegion),
+        "🗺️  Browse by region" => Ok(BrowseMode::ByRegion),
         "🏢  Browse by provider" => Ok(BrowseMode::ByProvider),
         "🔍  Search servers" => Ok(BrowseMode::Search),
         "📍  Quit" => Ok(BrowseMode::Quit),

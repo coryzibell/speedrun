@@ -23,11 +23,11 @@ pub enum ServerSelection {
     Quit,
 }
 
-pub enum BrowseMode {
-    All,
-    GlobalCdn,
-    ByRegion,
-    ByProvider,
+pub enum MenuSelection {
+    Server(ServerMetadata),
+    BrowseAll,
+    BrowseByRegion,
+    BrowseByProvider,
     Search,
     Quit,
 }
@@ -51,30 +51,60 @@ pub fn wait_for_continue() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-fn get_browse_mode() -> Result<BrowseMode, Box<dyn std::error::Error>> {
+fn get_main_menu_selection(servers: &[ServerMetadata]) -> Result<MenuSelection, Box<dyn std::error::Error>> {
     print!("\x1B[2J\x1B[1;1H");
     print!("{}", get_title());
     
-    let options = vec![
-        "🌍  Browse all servers",
-        "🌐  Global CDN servers",
-        "🗺️  Browse by region",
-        "🏢  Browse by provider",
-        "🔍  Search servers",
-        "📍  Quit",
-    ];
+    // Separate global servers from others
+    let global_servers: Vec<&ServerMetadata> = servers.iter()
+        .filter(|s| s.region.as_ref().map(|r| r == "Global").unwrap_or(false))
+        .collect();
     
-    let selection = Select::new("How would you like to browse servers?", options)
+    let mut options: Vec<String> = Vec::new();
+    
+    // Add global servers first
+    for server in &global_servers {
+        options.push(format!("🌐  {} - {}", 
+            server.name,
+            server.location.as_ref().unwrap_or(&"Global CDN".to_string())
+        ));
+    }
+    
+    // Add separator if we have global servers
+    if !global_servers.is_empty() {
+        options.push("─────────────────────────".to_string());
+    }
+    
+    // Add browsing options
+    options.push("🌍  Browse all servers".to_string());
+    options.push("🗺️  Browse by region".to_string());
+    options.push("🏢  Browse by provider".to_string());
+    options.push("🔍  Search servers".to_string());
+    options.push("📍  Quit".to_string());
+    
+    let selection = Select::new("Select a server or browse:", options)
         .prompt()?;
     
-    match selection {
-        "🌍  Browse all servers" => Ok(BrowseMode::All),
-        "🌐  Global CDN servers" => Ok(BrowseMode::GlobalCdn),
-        "🗺️  Browse by region" => Ok(BrowseMode::ByRegion),
-        "🏢  Browse by provider" => Ok(BrowseMode::ByProvider),
-        "🔍  Search servers" => Ok(BrowseMode::Search),
-        "📍  Quit" => Ok(BrowseMode::Quit),
-        _ => Ok(BrowseMode::All),
+    // Check if it's a global server
+    for (i, server) in global_servers.iter().enumerate() {
+        let server_option = format!("🌐  {} - {}", 
+            server.name,
+            server.location.as_ref().unwrap_or(&"Global CDN".to_string())
+        );
+        if selection == server_option {
+            return Ok(MenuSelection::Server((*global_servers[i]).clone()));
+        }
+    }
+    
+    // Check browsing options
+    match selection.as_str() {
+        "🌍  Browse all servers" => Ok(MenuSelection::BrowseAll),
+        "🗺️  Browse by region" => Ok(MenuSelection::BrowseByRegion),
+        "🏢  Browse by provider" => Ok(MenuSelection::BrowseByProvider),
+        "🔍  Search servers" => Ok(MenuSelection::Search),
+        "📍  Quit" => Ok(MenuSelection::Quit),
+        "─────────────────────────" => get_main_menu_selection(servers), // Re-show menu if separator selected
+        _ => Ok(MenuSelection::BrowseAll),
     }
 }
 
@@ -203,21 +233,6 @@ fn browse_all(servers: &[ServerMetadata], health_data: &LocalServerData) -> Resu
     select_from_list(servers, health_data)
 }
 
-fn browse_global_cdn(servers: &[ServerMetadata], health_data: &LocalServerData) -> Result<ServerSelection, Box<dyn std::error::Error>> {
-    let global_cdn_servers: Vec<ServerMetadata> = servers.iter()
-        .filter(|s| s.region.as_ref().map(|r| r == "Global").unwrap_or(false))
-        .cloned()
-        .collect();
-    
-    if global_cdn_servers.is_empty() {
-        println!("{}", "No Global CDN servers available.".yellow());
-        wait_for_continue()?;
-        return show_menu();
-    }
-    
-    select_from_list(&global_cdn_servers, health_data)
-}
-
 fn search_servers(servers: &[ServerMetadata], health_data: &LocalServerData) -> Result<ServerSelection, Box<dyn std::error::Error>> {
     let search_term = Text::new("Search servers:")
         .with_placeholder("Enter location, provider, or server name...")
@@ -249,16 +264,16 @@ pub fn show_menu() -> Result<ServerSelection, Box<dyn std::error::Error>> {
     let server_data = crate::servers::load_local_server_data();
     let servers = crate::servers::get_merged_server_list(&server_data);
     
-    // Get browse mode
-    let mode = get_browse_mode()?;
+    // Get main menu selection
+    let selection = get_main_menu_selection(&servers)?;
     
-    match mode {
-        BrowseMode::All => browse_all(&servers, &server_data),
-        BrowseMode::GlobalCdn => browse_global_cdn(&servers, &server_data),
-        BrowseMode::ByRegion => browse_by_region(&servers, &server_data),
-        BrowseMode::ByProvider => browse_by_provider(&servers, &server_data),
-        BrowseMode::Search => search_servers(&servers, &server_data),
-        BrowseMode::Quit => Ok(ServerSelection::Quit),
+    match selection {
+        MenuSelection::Server(server) => Ok(ServerSelection::Server(server)),
+        MenuSelection::BrowseAll => browse_all(&servers, &server_data),
+        MenuSelection::BrowseByRegion => browse_by_region(&servers, &server_data),
+        MenuSelection::BrowseByProvider => browse_by_provider(&servers, &server_data),
+        MenuSelection::Search => search_servers(&servers, &server_data),
+        MenuSelection::Quit => Ok(ServerSelection::Quit),
     }
 }
 

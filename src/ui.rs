@@ -6,21 +6,14 @@ use inquire::{Select, Text};
 use bytesize::ByteSize;
 use crate::servers::{ServerMetadata, LocalServerData};
 use std::collections::{HashMap, HashSet};
+use std::sync::OnceLock;
 
-fn print_title() {
-    println!(r#"
-                                              
- $$$$$$$\  $$$$$$\   $$$$$$\   $$$$$$\   $$$$$$$ | $$$$$$\  
-$$  _____|$$  __$$\ $$  __$$\ $$  __$$\ $$  __$$ |$$  __$$\ 
-\$$$$$$\  $$ /  $$ |$$$$$$$$ |$$$$$$$$ |$$ /  $$ |$$ /  $$ |
- \____$$\ $$ |  $$ |$$   ____|$$   ____|$$ |  $$ |$$ |  $$ |
-$$$$$$$  |$$$$$$$  |\$$$$$$$\ \$$$$$$$\ \$$$$$$$ |\$$$$$$  |
-\_______/ $$  ____/  \_______| \_______| \_______| \______/ 
-          $$ |                                              
-          $$ |                                              
-          \__|                                              
-speedo v{}
-"#, env!("CARGO_PKG_VERSION"));
+static CACHED_TITLE: OnceLock<String> = OnceLock::new();
+
+fn get_title() -> &'static str {
+    CACHED_TITLE.get_or_init(|| {
+        playbill::generate_title("speedo", Some(env!("CARGO_PKG_VERSION")))
+    })
 }
 
 pub enum ServerSelection {
@@ -59,7 +52,7 @@ pub fn wait_for_continue() -> Result<(), Box<dyn std::error::Error>> {
 
 fn get_browse_mode() -> Result<BrowseMode, Box<dyn std::error::Error>> {
     print!("\x1B[2J\x1B[1;1H");
-    print_title();
+    print!("{}", get_title());
     
     let options = vec![
         "🌍  Browse all servers",

@@ -227,30 +227,46 @@ You can configure the speed display format in speedo.toml:
 
 ## SERVERS
 
-speedo includes 34+ pre-configured speed test servers across all major regions, automatically updated from GitHub:
+speedo includes 73 pre-configured speed test servers across all major regions worldwide, automatically updated from GitHub:
 
 **Global/CDN:**
 - Cloudflare (Global CDN) - default
 - Tele2 (Global)
 
-**North America (15 servers):**
+**North America (30 servers):**
 - Hetzner: Ashburn VA, Hillsboro OR
 - Vultr: New Jersey, Atlanta, Chicago, Dallas, Seattle, Silicon Valley, Los Angeles
-- Linode: Newark, Atlanta, Dallas, Fremont
+- Linode: Newark, Atlanta, Dallas, Fremont, Chicago, Seattle, Miami
+- DataPacket: New York, Ashburn, Atlanta, Boston, Chicago, Dallas, Denver, Los Angeles, Miami, San Jose, Seattle, Querétaro (Mexico)
+- OVH: Canada, USA
 
-**Europe (11 servers):**
+**Europe (17 servers):**
 - Hetzner: Nuremberg, Falkenstein, Helsinki
 - Vultr: Amsterdam, Frankfurt, Paris, London, Warsaw, Madrid, Stockholm
-- Linode: London, Frankfurt
+- Linode: London, Frankfurt, Amsterdam, Madrid
+- DataPacket: Prague, Sofia
+- OVH: Europe (Multi-region)
 
-**Asia (4 servers):**
+**Asia (10 servers):**
 - Hetzner: Singapore
 - Vultr: Singapore, Bangalore
-- Linode: Singapore
+- Linode: Singapore, Tokyo, Osaka, Chennai, Jakarta
+- DataPacket: Hong Kong, Singapore
 
-**Oceania (2 servers):**
+**South America (5 servers):**
+- DataPacket: São Paulo (Brazil), Bogotá (Colombia), Buenos Aires (Argentina), Lima (Peru), Santiago (Chile)
+
+**Middle East (2 servers):**
+- DataPacket: Tel Aviv (Israel), Istanbul (Turkey)
+
+**Africa (1 server):**
+- DataPacket: Johannesburg, South Africa
+
+**Oceania (6 servers):**
 - Vultr: Sydney
 - Linode: Sydney
+- DataPacket: Sydney, Melbourne, Auckland (New Zealand)
+- OVH: Australia
 
 ### Interactive Browse Modes
 

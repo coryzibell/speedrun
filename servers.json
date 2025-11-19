@@ -1,6 +1,6 @@
 {
-  "version": "2.0.0",
-  "updated": "2025-11-19T05:27:00Z",
+  "version": "2.6.0",
+  "updated": "2025-11-19T06:22:00Z",
   "servers": [
     {
       "name": "Cloudflare CDN",
@@ -318,6 +318,39 @@
       "enabled": true
     },
     {
+      "name": "Linode Chicago",
+      "url": "http://speedtest.chicago.linode.com/100MB-chicago.bin",
+      "provider": "Linode",
+      "location": "Chicago, Illinois, USA",
+      "region": "North America",
+      "lat": 41.8781,
+      "lon": -87.6298,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "Linode Seattle",
+      "url": "http://speedtest.seattle.linode.com/100MB-seattle.bin",
+      "provider": "Linode",
+      "location": "Seattle, Washington, USA",
+      "region": "North America",
+      "lat": 47.6062,
+      "lon": -122.3321,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "Linode Miami",
+      "url": "http://speedtest.miami.linode.com/100MB-miami.bin",
+      "provider": "Linode",
+      "location": "Miami, Florida, USA",
+      "region": "North America",
+      "lat": 25.7617,
+      "lon": -80.1918,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
       "name": "Linode London",
       "url": "http://speedtest.london.linode.com/100MB-london.bin",
       "provider": "Linode",
@@ -340,6 +373,28 @@
       "enabled": true
     },
     {
+      "name": "Linode Amsterdam",
+      "url": "http://speedtest.amsterdam.linode.com/100MB-amsterdam.bin",
+      "provider": "Linode",
+      "location": "Amsterdam, Netherlands",
+      "region": "Europe",
+      "lat": 52.3676,
+      "lon": 4.9041,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "Linode Madrid",
+      "url": "http://speedtest.madrid.linode.com/100MB-madrid.bin",
+      "provider": "Linode",
+      "location": "Madrid, Spain",
+      "region": "Europe",
+      "lat": 40.4168,
+      "lon": -3.7038,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
       "name": "Linode Singapore",
       "url": "http://speedtest.singapore.linode.com/100MB-singapore.bin",
       "provider": "Linode",
@@ -347,6 +402,50 @@
       "region": "Asia",
       "lat": 1.3521,
       "lon": 103.8198,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "Linode Tokyo",
+      "url": "http://speedtest.tokyo2.linode.com/100MB-tokyo2.bin",
+      "provider": "Linode",
+      "location": "Tokyo, Japan",
+      "region": "Asia",
+      "lat": 35.6762,
+      "lon": 139.6503,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "Linode Osaka",
+      "url": "http://speedtest.osaka.linode.com/100MB-osaka.bin",
+      "provider": "Linode",
+      "location": "Osaka, Japan",
+      "region": "Asia",
+      "lat": 34.6937,
+      "lon": 135.5023,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "Linode Chennai",
+      "url": "http://speedtest.chennai.linode.com/100MB-chennai.bin",
+      "provider": "Linode",
+      "location": "Chennai, India",
+      "region": "Asia",
+      "lat": 13.0827,
+      "lon": 80.2707,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "Linode Jakarta",
+      "url": "http://speedtest.jakarta.linode.com/100MB-jakarta.bin",
+      "provider": "Linode",
+      "location": "Jakarta, Indonesia",
+      "region": "Asia",
+      "lat": -6.2088,
+      "lon": 106.8456,
       "file_size": 104857600,
       "enabled": true
     },
@@ -359,6 +458,345 @@
       "lat": -33.8688,
       "lon": 151.2093,
       "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "OVH Europe",
+      "url": "https://proof.ovh.net/files/100Mb.dat",
+      "provider": "OVH",
+      "location": "Europe (Multi-region)",
+      "region": "Europe",
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "OVH Canada",
+      "url": "https://proof.ovh.ca/files/100Mb.dat",
+      "provider": "OVH",
+      "location": "Canada",
+      "region": "North America",
+      "lat": 45.5017,
+      "lon": -73.5673,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "OVH USA",
+      "url": "https://proof.ovh.us/files/100Mb.dat",
+      "provider": "OVH",
+      "location": "United States",
+      "region": "North America",
+      "lat": 38.9072,
+      "lon": -77.0369,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "OVH Australia",
+      "url": "https://proof.ovh.au/files/100Mb.dat",
+      "provider": "OVH",
+      "location": "Sydney, Australia",
+      "region": "Oceania",
+      "lat": -33.8688,
+      "lon": 151.2093,
+      "file_size": 104857600,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket Sydney",
+      "url": "https://syd.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "Sydney, Australia",
+      "region": "Oceania",
+      "lat": -33.8688,
+      "lon": 151.2093,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket Melbourne",
+      "url": "https://mel.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "Melbourne, Australia",
+      "region": "Oceania",
+      "lat": -37.8136,
+      "lon": 144.9631,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket Auckland",
+      "url": "https://akl.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "Auckland, New Zealand",
+      "region": "Oceania",
+      "lat": -36.8485,
+      "lon": 174.7633,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket São Paulo",
+      "url": "https://sao.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "São Paulo, Brazil",
+      "region": "South America",
+      "lat": -23.5505,
+      "lon": -46.6333,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket Bogotá",
+      "url": "https://bog.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "Bogotá, Colombia",
+      "region": "South America",
+      "lat": 4.7110,
+      "lon": -74.0721,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket Buenos Aires",
+      "url": "https://eze.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "Buenos Aires, Argentina",
+      "region": "South America",
+      "lat": -34.6037,
+      "lon": -58.3816,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket Lima",
+      "url": "https://lim.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "Lima, Peru",
+      "region": "South America",
+      "lat": -12.0464,
+      "lon": -77.0428,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket Querétaro",
+      "url": "https://qro.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "Querétaro, Mexico",
+      "region": "North America",
+      "lat": 20.5888,
+      "lon": -100.3899,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket Santiago",
+      "url": "https://scl.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "Santiago, Chile",
+      "region": "South America",
+      "lat": -33.4489,
+      "lon": -70.6693,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket New York",
+      "url": "https://nyc.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "New York, New York, USA",
+      "region": "North America",
+      "lat": 40.7128,
+      "lon": -74.0060,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket Ashburn",
+      "url": "https://ash.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "Ashburn, Virginia, USA",
+      "region": "North America",
+      "lat": 38.8816,
+      "lon": -77.1803,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket Atlanta",
+      "url": "https://atl.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "Atlanta, Georgia, USA",
+      "region": "North America",
+      "lat": 33.7490,
+      "lon": -84.3880,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket Boston",
+      "url": "https://bos.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "Boston, Massachusetts, USA",
+      "region": "North America",
+      "lat": 42.3601,
+      "lon": -71.0589,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket Chicago",
+      "url": "https://chi.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "Chicago, Illinois, USA",
+      "region": "North America",
+      "lat": 41.8781,
+      "lon": -87.6298,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket Dallas",
+      "url": "https://dal.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "Dallas, Texas, USA",
+      "region": "North America",
+      "lat": 32.7767,
+      "lon": -96.7970,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket Denver",
+      "url": "https://den.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "Denver, Colorado, USA",
+      "region": "North America",
+      "lat": 39.7392,
+      "lon": -104.9903,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket Los Angeles",
+      "url": "https://lax.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "Los Angeles, California, USA",
+      "region": "North America",
+      "lat": 34.0522,
+      "lon": -118.2437,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket Miami",
+      "url": "https://mia.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "Miami, Florida, USA",
+      "region": "North America",
+      "lat": 25.7617,
+      "lon": -80.1918,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket San Jose",
+      "url": "https://sjc.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "San Jose, California, USA",
+      "region": "North America",
+      "lat": 37.3382,
+      "lon": -121.8863,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket Seattle",
+      "url": "https://sea.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "Seattle, Washington, USA",
+      "region": "North America",
+      "lat": 47.6062,
+      "lon": -122.3321,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket Hong Kong",
+      "url": "https://hkg.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "Hong Kong",
+      "region": "Asia",
+      "lat": 22.3193,
+      "lon": 114.1694,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket Singapore",
+      "url": "https://sin.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "Singapore",
+      "region": "Asia",
+      "lat": 1.3521,
+      "lon": 103.8198,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket Istanbul",
+      "url": "https://ist.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "Istanbul, Turkey",
+      "region": "Middle East",
+      "lat": 41.0082,
+      "lon": 28.9784,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket Prague",
+      "url": "https://prg.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "Prague, Czech Republic",
+      "region": "Europe",
+      "lat": 50.0755,
+      "lon": 14.4378,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket Sofia",
+      "url": "https://sof.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "Sofia, Bulgaria",
+      "region": "Europe",
+      "lat": 42.6977,
+      "lon": 23.3219,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket Tel Aviv",
+      "url": "https://tlv.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "Tel Aviv, Israel",
+      "region": "Middle East",
+      "lat": 32.0853,
+      "lon": 34.7818,
+      "file_size": 100000000,
+      "enabled": true
+    },
+    {
+      "name": "DataPacket Johannesburg",
+      "url": "https://jnb.download.datapacket.com/100mb.bin",
+      "provider": "DataPacket",
+      "location": "Johannesburg, South Africa",
+      "region": "Africa",
+      "lat": -26.2041,
+      "lon": 28.0473,
+      "file_size": 100000000,
       "enabled": true
     }
   ]

@@ -24,6 +24,14 @@ jobs:
             artifact_name: speedo
             asset_name: speedo-linux-aarch64
           - os: ubuntu-latest
+            target: x86_64-unknown-linux-musl
+            artifact_name: speedo
+            asset_name: speedo-linux-x86_64-musl
+          - os: ubuntu-latest
+            target: aarch64-unknown-linux-musl
+            artifact_name: speedo
+            asset_name: speedo-linux-aarch64-musl
+          - os: ubuntu-latest
             target: x86_64-unknown-freebsd
             artifact_name: speedo
             asset_name: speedo-freebsd-x86_64
@@ -53,7 +61,7 @@ jobs:
           targets: ${{ matrix.target }}
 
       - name: Install cross (cross-compilation targets)
-        if: matrix.target == 'aarch64-unknown-linux-gnu' || matrix.target == 'x86_64-unknown-freebsd'
+        if: matrix.target == 'aarch64-unknown-linux-gnu' || matrix.target == 'x86_64-unknown-freebsd' || contains(matrix.target, 'musl')
         run: cargo install cross --git https://github.com/cross-rs/cross
 
       - name: Build x86 Linux
@@ -62,6 +70,14 @@ jobs:
 
       - name: Build ARM Linux
         if: matrix.target == 'aarch64-unknown-linux-gnu'
+        run: cross build --release --target ${{ matrix.target }}
+
+      - name: Build x86 MUSL Linux
+        if: matrix.target == 'x86_64-unknown-linux-musl'
+        run: cross build --release --target ${{ matrix.target }}
+
+      - name: Build ARM MUSL Linux
+        if: matrix.target == 'aarch64-unknown-linux-musl'
         run: cross build --release --target ${{ matrix.target }}
 
       - name: Build x86 FreeBSD

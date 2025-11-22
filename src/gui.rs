@@ -197,8 +197,7 @@ pub mod freya_ui {
                                 
                                 rsx! {
                                     for (idx, server) in filtered.iter().enumerate() {
-                                {
-                                    let is_selected = idx == *selected_server.read();
+                                        let is_selected = idx == *selected_server.read();
                                     let bg_color = if is_selected {
                                         "rgb(50, 100, 150)"
                                     } else {

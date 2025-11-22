@@ -198,18 +198,17 @@ pub mod freya_ui {
                                 rsx! {
                                     for (idx, server) in filtered.iter().enumerate() {
                                         let is_selected = idx == *selected_server.read();
-                                    let bg_color = if is_selected {
-                                        "rgb(50, 100, 150)"
-                                    } else {
-                                        "rgb(30, 30, 40)"
-                                    };
-                                    
-                                    let server_name = format!("{} - {}", 
-                                        server.name,
-                                        server.location.as_ref().unwrap_or(&String::from("Unknown"))
-                                    );
-                                    
-                                    rsx! {
+                                        let bg_color = if is_selected {
+                                            "rgb(50, 100, 150)"
+                                        } else {
+                                            "rgb(30, 30, 40)"
+                                        };
+                                        
+                                        let server_name = format!("{} - {}", 
+                                            server.name,
+                                            server.location.as_ref().unwrap_or(&String::from("Unknown"))
+                                        );
+                                        
                                         rect {
                                             key: "{idx}",
                                             width: "100%",
@@ -231,7 +230,6 @@ pub mod freya_ui {
                                     }
                                 }
                             }
-                        }
                     }
                 }
                 

@@ -195,36 +195,42 @@ pub mod freya_ui {
                                         .collect()
                                 };
                                 
+                                let current_selection = *selected_server.read();
+                                
                                 rsx! {
                                     for (idx, server) in filtered.iter().enumerate() {
-                                        let is_selected = idx == *selected_server.read();
-                                        let bg_color = if is_selected {
-                                            "rgb(50, 100, 150)"
-                                        } else {
-                                            "rgb(30, 30, 40)"
-                                        };
-                                        
-                                        let server_name = format!("{} - {}", 
-                                            server.name,
-                                            server.location.as_ref().unwrap_or(&String::from("Unknown"))
-                                        );
-                                        
-                                        rect {
-                                            key: "{idx}",
-                                            width: "100%",
-                                            height: "40",
-                                            background: "{bg_color}",
-                                            padding: "10",
-                                            margin: "2",
-                                            corner_radius: "4",
-                                            onclick: move |_| {
-                                                selected_server.set(idx);
-                                            },
+                                        {
+                                            let is_selected = idx == current_selection;
+                                            let bg_color = if is_selected {
+                                                "rgb(50, 100, 150)"
+                                            } else {
+                                                "rgb(30, 30, 40)"
+                                            };
                                             
-                                            label {
-                                                color: "rgb(220, 220, 230)",
-                                                font_size: "14",
-                                                "{server_name}"
+                                            let server_name = format!("{} - {}", 
+                                                server.name,
+                                                server.location.as_ref().unwrap_or(&String::from("Unknown"))
+                                            );
+                                            
+                                            rsx! {
+                                                rect {
+                                                    key: "{idx}",
+                                                    width: "100%",
+                                                    height: "40",
+                                                    background: "{bg_color}",
+                                                    padding: "10",
+                                                    margin: "2",
+                                                    corner_radius: "4",
+                                                    onclick: move |_| {
+                                                        selected_server.set(idx);
+                                                    },
+                                                    
+                                                    label {
+                                                        color: "rgb(220, 220, 230)",
+                                                        font_size: "14",
+                                                        "{server_name}"
+                                                    }
+                                                }
                                             }
                                         }
                                     }

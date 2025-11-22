@@ -38,10 +38,10 @@ fn format_speed(bytes_per_sec: f64, unit: SpeedUnit) -> String {
             }
         }
         SpeedUnit::BytesMetric => {
-            format!("{}/s", ByteSize::b(bytes_per_sec as u64))
+            format!("{}/s", ByteSize::b(bytes_per_sec as u64).display().si())
         }
         SpeedUnit::BytesBinary => {
-            format!("{}/s", ByteSize::b(bytes_per_sec as u64).to_string_as(true))
+            format!("{}/s", ByteSize::b(bytes_per_sec as u64))
         }
     }
 }

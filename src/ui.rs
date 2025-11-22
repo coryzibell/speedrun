@@ -392,7 +392,7 @@ pub fn print_results(
     let mbs = (bytes_downloaded as f64 / total_time) / 1_048_576.0;
     let mbps = (bytes_downloaded as f64 * 8.0 / total_time) / 1_000_000.0;
     
-    let size_str = ByteSize::b(bytes_downloaded).to_string_as(true);
+    let size_str = ByteSize::b(bytes_downloaded).to_string();
     
     let time_str = if total_time >= 60.0 {
         format!("{:.0}m {:.1}s", total_time / 60.0, total_time % 60.0)
@@ -452,7 +452,7 @@ pub fn print_speed_only(
     let mbs = (bytes_downloaded as f64 / total_time) / 1_048_576.0;
     let mbps = (bytes_downloaded as f64 * 8.0 / total_time) / 1_000_000.0;
     
-    let size_str = ByteSize::b(bytes_downloaded).to_string_as(true);
+    let size_str = ByteSize::b(bytes_downloaded).to_string();
     
     let time_str = if total_time >= 60.0 {
         format!("{:.0}m {:.1}s", total_time / 60.0, total_time % 60.0)

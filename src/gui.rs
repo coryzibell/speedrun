@@ -61,6 +61,7 @@ pub mod freya_ui {
         let mut test_running = use_signal(|| false);
         let mut last_result = use_signal(|| None::<TestResult>);
         let mut status_message = use_signal(|| String::from("Ready to test"));
+        let mut filter_text = use_signal(|| String::new());
         
         let run_test = move |_| {
             if *test_running.read() {
@@ -68,9 +69,24 @@ pub mod freya_ui {
             }
             
             let idx = *selected_server.read();
-            let servers_list = servers.read();
             
-            if let Some(server) = servers_list.get(idx) {
+            // Filter servers inline
+            let filter = filter_text.read().to_lowercase();
+            let filtered: Vec<_> = if filter.is_empty() {
+                servers.read().clone()
+            } else {
+                servers.read()
+                    .iter()
+                    .filter(|s| {
+                        s.name.to_lowercase().contains(&filter) ||
+                        s.location.as_ref().map(|l| l.to_lowercase().contains(&filter)).unwrap_or(false) ||
+                        s.provider.as_ref().map(|p| p.to_lowercase().contains(&filter)).unwrap_or(false)
+                    })
+                    .cloned()
+                    .collect()
+            };
+            
+            if let Some(server) = filtered.get(idx) {
                 let server_clone = server.clone();
                 let config_clone = config.read().clone();
                 let speed_unit = SpeedUnit::from_string(&config_clone.speed_unit);
@@ -141,6 +157,18 @@ pub mod freya_ui {
                         "Select Server:"
                     }
                     
+                    // Filter input
+                    Input {
+                        value: filter_text.read().clone(),
+                        onchange: move |new_value: String| {
+                            filter_text.set(new_value);
+                            // Reset selection when filter changes
+                            selected_server.set(0);
+                        },
+                        placeholder: "Type to filter servers...",
+                        width: "100%"
+                    }
+                    
                     ScrollView {
                         width: "100%",
                         height: "200",
@@ -150,7 +178,25 @@ pub mod freya_ui {
                             direction: "vertical",
                             width: "100%",
                             
-                            for (idx, server) in servers.read().iter().enumerate() {
+                            {
+                                // Compute filtered servers
+                                let filter = filter_text.read().to_lowercase();
+                                let filtered: Vec<_> = if filter.is_empty() {
+                                    servers.read().clone()
+                                } else {
+                                    servers.read()
+                                        .iter()
+                                        .filter(|s| {
+                                            s.name.to_lowercase().contains(&filter) ||
+                                            s.location.as_ref().map(|l| l.to_lowercase().contains(&filter)).unwrap_or(false) ||
+                                            s.provider.as_ref().map(|p| p.to_lowercase().contains(&filter)).unwrap_or(false)
+                                        })
+                                        .cloned()
+                                        .collect()
+                                };
+                                
+                                rsx! {
+                                    for (idx, server) in filtered.iter().enumerate() {
                                 {
                                     let is_selected = idx == *selected_server.read();
                                     let bg_color = if is_selected {

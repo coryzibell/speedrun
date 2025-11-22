@@ -61,6 +61,16 @@ pub async fn download_file(
     user_agent: &str,
     speed_unit: SpeedUnit,
 ) -> Result<DownloadResult, Box<dyn std::error::Error>> {
+    download_file_with_progress(url, save_path, user_agent, speed_unit, true).await
+}
+
+pub async fn download_file_with_progress(
+    url: &str,
+    save_path: Option<&str>,
+    user_agent: &str,
+    speed_unit: SpeedUnit,
+    show_progress: bool,
+) -> Result<DownloadResult, Box<dyn std::error::Error>> {
     let client = Client::builder()
         .user_agent(user_agent)
         .build()?;
@@ -76,21 +86,26 @@ pub async fn download_file(
     let ttfb_start = Instant::now();
     let mut stream = response.bytes_stream();
     
-    let pb = ProgressBar::new(total_size);
-    
-    // Use different template based on whether we know the file size
-    let template = if total_size > 0 {
-        "{bar:40.cyan/blue} {bytes}/{total_bytes} {msg} ({eta})"
+    let pb = if show_progress {
+        let pb = ProgressBar::new(total_size);
+        
+        // Use different template based on whether we know the file size
+        let template = if total_size > 0 {
+            "{bar:40.cyan/blue} {bytes}/{total_bytes} {msg} ({eta})"
+        } else {
+            "{spinner:.cyan} {bytes} {msg}"
+        };
+        
+        pb.set_style(
+            ProgressStyle::default_bar()
+                .template(template)
+                .unwrap()
+                .progress_chars("##-"),
+        );
+        pb
     } else {
-        "{spinner:.cyan} {bytes} {msg}"
+        ProgressBar::hidden()
     };
-    
-    pb.set_style(
-        ProgressStyle::default_bar()
-            .template(template)
-            .unwrap()
-            .progress_chars("##-"),
-    );
 
     let mut downloaded: u64 = 0;
     let mut ttfb: Option<f64> = None;

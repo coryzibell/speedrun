@@ -6,7 +6,7 @@ pub mod freya_ui {
     
     use crate::config::{Config, SpeedUnit};
     use crate::servers::{get_merged_server_list, load_local_server_data};
-    use crate::downloader::{download_file, DownloadResult};
+    use crate::downloader::DownloadResult;
     
     #[derive(Clone, Debug)]
     pub struct TestResult {
@@ -78,11 +78,12 @@ pub mod freya_ui {
                 status_message.set(format!("Testing {}...", server_clone.name));
                 
                 spawn(async move {
-                    match download_file(
+                    match crate::downloader::download_file_with_progress(
                         &server_clone.url,
                         None,
                         &config_clone.user_agent,
                         speed_unit,
+                        false, // Disable progress bar in GUI mode
                     ).await {
                         Ok(result) => {
                             let test_result = TestResult::from((result, server_clone.name.as_str()));
